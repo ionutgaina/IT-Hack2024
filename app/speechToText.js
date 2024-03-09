@@ -9,16 +9,10 @@ async function startRecording() {
         chunks.push(event.data);
     };
     mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { 'type': 'audio/wav' });
-        const audioURL = URL.createObjectURL(blob);
-        
-        const downloadLink = document.createElement('a');
-        downloadLink.href = audioURL;
-        downloadLink.download = 'recorded_audio.wav';
-        downloadLink.click();
-        
-        // Clean up resources
-        URL.revokeObjectURL(audioURL);
+        const blob = new Blob(chunks, { 'type': 'mp3' });
+        speech2text(blob).then((result) => {
+            console.log(result);
+        });
         chunks = [];
     };
     mediaRecorder.start();
@@ -32,12 +26,26 @@ function stopRecording() {
 document.addEventListener('keydown', handleKeyPress);
 
 function handleKeyPress(event) {
-    // Check if the 'u' key is pressed
-    if (event.key === 'r' && event.ctrlKey === true) {
+    if (event.key === 'z' && event.ctrlKey === true) {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
             stopRecording();
         } else {
             startRecording();
         }
     }
+}
+
+
+async function speech2text(data) {
+	const response = await fetch(
+		"https://api-inference.huggingface.co/models/openai/whisper-large-v3",
+		{
+			headers: { Authorization: "Bearer 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" },
+			method: "POST",
+			body: data,
+		}
+	);
+	const result = await response.json();
+    console.log(result);
+	return result;
 }
