@@ -27,14 +27,20 @@ elements.forEach(function (element) {
     var code = e.code;
     if (code === 'Tab') {
         // console.log(e.target);
-        console.log(parserHTML(e.target));
+        let parsed = parserHTML(e.target);
+        console.log(parsed);
+        text2speech({"inputs": parsed}).then((response) => {
+          var url = URL.createObjectURL(response);
+          var a = new Audio(url);
+          a.play();
+      });
     }
 });
 });
 
 function parserHTML(element) {
-    let a = new Audio(chrome.runtime.getURL('recordings/Generating.mp3'))
-    a.play()
+    // let a = new Audio(chrome.runtime.getURL('recordings/Generating.mp3'))
+    // a.play()
     switch (element.tagName.toLowerCase()) {
       case 'img':
         return parseIMG(element);
@@ -122,3 +128,18 @@ function parseA(element) {
 
   return 'This is empty link'
 }
+
+
+async function text2speech(data) {
+  const response = await fetch(
+      "https://api-inference.huggingface.co/models/facebook/mms-tts-eng",
+      {
+          headers: { Authorization: "Bearer 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" },
+          method: "POST",
+          body: JSON.stringify(data),
+      }
+  );
+
+      const result = await response.blob();
+      return result;
+  }

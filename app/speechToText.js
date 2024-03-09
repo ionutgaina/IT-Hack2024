@@ -46,6 +46,7 @@ async function speech2text(data) {
 		}
 	);
 	const result = await response.json();
+    
     console.log(result);
 	return result;
 }
