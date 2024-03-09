@@ -1,3 +1,7 @@
+function containsHTMLElement(text) {
+  var regex = /<[^>]+>/;
+  return regex.test(text);
+}
 
 function setTabIndexForLeafElements(element) {
   // Check if the element has any child elements
@@ -22,6 +26,25 @@ elements.forEach(function(element) {
         var code = e.code;
         if (code === 'Tab') {
             console.log(e.target);
+            parserHTML(e.target);
         }
     });
 });
+
+function parserHTML(element) {
+  console.log("InnerHTML " + element.innerHTML);
+  console.log("TagName " + element.tagName);
+  console.log("Alt attribute " + element.getAttribute('alt'));
+}
+
+function parseA(element) {
+  let href, innerHTML;
+
+  if (element.getAttribute('href').trim() !== null) {
+    href = element.getAttribute('href');
+  }
+
+  if (element.innerHTML.trim() !== null) {
+    innerHTML = element.innerHTML;
+  }
+}
