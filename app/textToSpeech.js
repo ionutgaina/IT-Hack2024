@@ -4,13 +4,26 @@ function containsHTMLElement(text) {
   return regex.test(text);
 }
 
+let index = 1;
+
+function checkClickable(element) {
+  if (element.tagName.toLowerCase() === 'a' || element.tagName.toLowerCase() === 'button' || element.tagName.toLowerCase() === 'input') {
+    element.setAttribute('data-tabindex', index);
+    index += 1;
+  }
+}
+
 function setTabIndexForLeafElements(element) {
   // Check if the element has any child elements
   if (element.children.length === 0) {
     // Set tabindex to 0 for leaf elements
     element.setAttribute('tabindex', '0');
+    element.setAttribute('data-tabindex', index);
+    index += 1;
   } else {
     // Recursively set tabindex for child elements
+    checkClickable(element);
+
     var children = element.children;
     for (var i = 0; i < children.length; i++) {
       setTabIndexForLeafElements(children[i]);
@@ -27,7 +40,8 @@ elements.forEach(function (element) {
     var code = e.code;
     if (code === 'Tab') {
         // console.log(e.target);
-        let parsed = parserHTML(e.target);
+        let index = e.target.getAttribute('data-tabindex');
+        let parsed = index + ": " +parserHTML(e.target);
         console.log(parsed);
         text2speech({"inputs": parsed}).then((response) => {
           var url = URL.createObjectURL(response);
@@ -59,6 +73,20 @@ function parserHTML(element) {
       default:
         return parseText(element);
     }
+}
+
+function parseInput(element) {
+  let value;
+
+  if (element.getAttribute('value') && element.getAttribute('value').trim() !== null) {
+    value = element.getAttribute('value');
+  }
+
+  if (value !== undefined) {
+    return 'This is an input with value "' + value + '"';
+  }
+
+  return 'This is an empty input'
 }
 
 
