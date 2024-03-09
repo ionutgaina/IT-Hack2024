@@ -1,4 +1,5 @@
 console.log("Parser.js is running");
+let href = null;
 function containsHTMLElement(text) {
   var regex = /<[^>]+>/;
   return regex.test(text);
@@ -37,39 +38,45 @@ setTabIndexForLeafElements(document.body);
 var elements = document.querySelectorAll('body');
 
 elements.forEach(function (element) {
-  element.addEventListener('keyup', function(e) {
+  element.addEventListener('keyup', function (e) {
     var code = e.code;
     if (code === 'Tab') {
-        // console.log(e.target);
-        let index = e.target.getAttribute('data-tabindex');
-        let parsed = `Tab ${index} - ${parserHTML(e.target)}`;
-        console.log(parsed);
-        callFunction(parsed);
+      // console.log(e.target);
+      let index = e.target.getAttribute('data-tabindex');
+      let parsed = `Tab ${numberToText(index)} - ${parserHTML(e.target)}`;
+    
+      if (e.target.getAttribute('href') && e.target.getAttribute('href').trim() !== null) {
+        href = e.target.getAttribute('href');
+      }
+      console.log(href)
+      callFunction(parsed);
     }
-});
+  });
 });
 
 function parserHTML(element) {
-    // let a = new Audio(chrome.runtime.getURL('recordings/Generating.mp3'))
-    // a.play()
-    switch (element.tagName.toLowerCase()) {
-      case 'img':
-        return parseIMG(element);
-      case 'source':
-        return 'This is a source tag for image';
-      case 'path':
-        return parseIMG(element);
-      case 'rect':
-        return parseIMG(element);
-      case 'input':
-        return parseInput(element);
-      case 'button':
-        return parseButton(element);
-      case 'a':
-        return parseA(element);
-      default:
-        return parseText(element);
-    }
+  // let a = new Audio(chrome.runtime.getURL('recordings/Generating.mp3'))
+  // a.play()
+
+  switch (element.tagName.toLowerCase()) {
+    case 'img':
+      return parseIMG(element);
+    case 'source':
+      return 'This is a source tag for image';
+    case 'path':
+      return parseIMG(element);
+    case 'rect':
+      return parseIMG(element);
+    case 'input':
+      return parseInput(element);
+    case 'button':
+      return parseButton(element);
+    case 'a':
+
+      return parseA(element);
+    default:
+      return parseText(element);
+  }
 }
 
 function parseInput(element) {
@@ -90,7 +97,7 @@ function parseInput(element) {
 function parseButton(element) {
   let innerHTML;
 
-  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false) {
     innerHTML = element.innerHTML;
   }
 
@@ -104,7 +111,7 @@ function parseButton(element) {
 function parseIMG(element) {
   let alt;
 
-  if ( element.getAttribute('alt') && element.getAttribute('alt').trim() !== null) {
+  if (element.getAttribute('alt') && element.getAttribute('alt').trim() !== null) {
     alt = element.getAttribute('alt');
   }
 
@@ -119,7 +126,7 @@ function parseIMG(element) {
 function parseText(element) {
   let innerHTML;
 
-  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false) {
     innerHTML = element.innerHTML;
   }
 
@@ -137,9 +144,9 @@ function parseA(element) {
     href = element.getAttribute('href');
   }
 
-  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false) {
     innerHTML = element.innerHTML;
-  } else if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === true){
+  } else if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === true) {
     innerHTML = 'HTML content';
   }
 
@@ -156,15 +163,31 @@ function parseA(element) {
 
 
 async function text2speech(data) {
-  const response = await fetch(
+  try {
+
+    let random = Math.random() * 1000;
+    // make 2 random cases
+    if (random < 500) {
+      var a = new Audio(chrome.runtime.getURL('recordings/Generating.mp3'))
+      a.play()
+    } else {
+      var a = new Audio(chrome.runtime.getURL('recordings/Loading.mp3'))
+      a.play()
+    }
+
+
+    const response = await fetch(
       "https://api-inference.huggingface.co/models/facebook/mms-tts-eng",
       {
-          headers: { Authorization: "Bearer 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" },
-          method: "POST",
-          body: JSON.stringify(data),
+        headers: { Authorization: "Bearer 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" },
+        method: "POST",
+        body: JSON.stringify(data),
       }
-  );
+    );
 
-      const result = await response.blob();
-      return result;
+    const result = await response.blob();
+    return result;
+  } catch (e) {
+    console.log(e)
   }
+}

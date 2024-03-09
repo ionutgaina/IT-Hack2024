@@ -31,22 +31,36 @@
   "description": "Extension from IT intern Hackathon 2024",
   "manifest_version": 3,
   "name": "Blindful Extension",
-  "permissions": ["webNavigation", "tabs", "activeTab"],
+  "permissions": [
+    "webNavigation",
+    "tabs",
+    "activeTab"
+  ],
   "version": "0.1",
   "web_accessible_resources": [
     {
       "resources": [
         "recordings/Recording.mp3",
         "recordings/Generating.mp3",
-        "recordings/Loading.mp3"
+        "recordings/Loading.mp3",
+        "recordings/yahu.mp3"
       ],
-      "matches": ["<all_urls>"]
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["textToSpeech.js", "speechToText.js", "bouncing.js", "numbers.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "textToSpeech.js",
+        "speechToText.js",
+        "bouncing.js",
+        "numbers.js"
+      ]
     }
   ]
 }

@@ -3,6 +3,8 @@ let chunks = [];
 
 async function startRecording() {
     console.log('start recording');
+    var a = new Audio(chrome.runtime.getURL('recordings/Recording.mp3'))
+    a.play();
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.ondataavailable = event => {
@@ -13,11 +15,16 @@ async function startRecording() {
         speech2text(blob).then((result) => {
             console.log(result);
             const number = result.text.match(/\d+/);
-            console.log(number);
             // number = textToNumber(number);
             if (number) {
                 tabToIndex(number[0]);
             }
+
+            if (result.text.includes('Go to') && href != null) {
+                window.location.href += href;
+            }
+
+
         });
         chunks = [];
     };
@@ -26,6 +33,8 @@ async function startRecording() {
 
 function stopRecording() {
     console.log('stop recording');
+    var a = new Audio(chrome.runtime.getURL('recordings/yahu.mp3'))
+    a.play();
     mediaRecorder.stop();
 }
 
@@ -41,19 +50,18 @@ function handleKeyPress(event) {
     }
 }
 
-
 async function speech2text(data) {
-	const response = await fetch(
-		"https://api-inference.huggingface.co/models/openai/whisper-large-v3",
-		{
-			headers: { Authorization: "Bearer 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" },
-			method: "POST",
-			body: data,
-		}
-	);
-	const result = await response.json();
+    const response = await fetch(
+        "https://api-inference.huggingface.co/models/openai/whisper-large-v3",
+        {
+            headers: { Authorization: "Bearer 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" },
+            method: "POST",
+            body: data,
+        }
+    );
+    const result = await response.json();
 
-	return result;
+    return result;
 }
 
 
@@ -65,17 +73,17 @@ function tabToIndex(index) {
         return;
     }
 
-    const element = elementsWithTabIndex[index-1];
+    const element = elementsWithTabIndex[index - 1];
 
     if (element) {
         element.focus();
         let index = element.getAttribute('data-tabindex');
-        let parsed = index + ": " +parserHTML(element);
+        let parsed = index + ": " + parserHTML(element);
         console.log(parsed);
-        text2speech({"inputs": parsed}).then((response) => {
-          var url = URL.createObjectURL(response);
-          var a = new Audio(url);
-          a.play();
-      });
+        text2speech({ "inputs": parsed }).then((response) => {
+            var url = URL.createObjectURL(response);
+            var a = new Audio(url);
+            a.play();
+        });
     }
 }

@@ -1,0 +1,20 @@
+{
+  "name": "it-hack2024",
+  "version": "1.0.0",
+  "description": "<script> window.addEventListener('blur', function() {     var focusedElement = document.activeElement;",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionutgaina/IT-Hack2024.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ionutgaina/IT-Hack2024/issues"
+  },
+  "homepage": "https://github.com/ionutgaina/IT-Hack2024#readme"
+}
