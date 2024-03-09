@@ -1,3 +1,4 @@
+<script>
 window.addEventListener('focus', function() {
     var focusedElement = document.activeElement;
 
@@ -7,3 +8,4 @@ window.addEventListener('focus', function() {
 function parseHTML(element) {
     console.log(element.tagName);
 }
+</script>
