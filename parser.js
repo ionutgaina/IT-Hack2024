@@ -44,6 +44,12 @@ function parserHTML(element) {
   switch (element.tagName.toLowerCase()) {
     case 'img':
       return parseIMG(element);
+    case 'source':
+      return 'This is a source tag for image';
+    case 'path':
+      return parseIMG(element);
+    case 'rect':
+      return parseIMG(element);
     case 'input':
       return parseInput(element);
     case 'button':
@@ -55,10 +61,24 @@ function parserHTML(element) {
   }
 }
 
+function parseButton(element) {
+  let innerHTML;
+
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+    innerHTML = element.innerHTML;
+  }
+
+  if (innerHTML !== undefined) {
+    return 'This is a button with text "' + innerHTML + '"';
+  }
+
+  return 'Cautious! This button has no text'
+}
+
 function parseIMG(element) {
   let alt;
 
-  if (element.getAttribute('alt').trim() !== null) {
+  if ( element.getAttribute('alt') && element.getAttribute('alt').trim() !== null) {
     alt = element.getAttribute('alt');
   }
 
@@ -73,7 +93,7 @@ function parseIMG(element) {
 function parseText(element) {
   let innerHTML;
 
-  if (element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
     innerHTML = element.innerHTML;
   }
 
@@ -87,12 +107,14 @@ function parseText(element) {
 function parseA(element) {
   let href, innerHTML;
 
-  if (element.getAttribute('href').trim() !== null) {
+  if (element.getAttribute('href') && element.getAttribute('href').trim() !== null) {
     href = element.getAttribute('href');
   }
 
-  if (element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+  if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
     innerHTML = element.innerHTML;
+  } else if (element.innerHTML && element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === true){
+    innerHTML = 'HTML content';
   }
 
   if (href === undefined && innerHTML !== undefined) {
