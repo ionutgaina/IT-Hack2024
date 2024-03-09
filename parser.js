@@ -33,14 +33,6 @@ elements.forEach(function(element) {
 });
 
 function parserHTML(element) {
-  console.log("InnerHTML " + element.innerHTML);
-  console.log("TagName " + element.tagName);
-  console.log("Alt attribute " + element.getAttribute('alt'));
-
-  if (element.tagName.toLowerCase() === 'a') {
-    return parseA(element);
-  }
-
   switch (element.tagName.toLowerCase()) {
     case 'img':
       return parseIMG(element);
