@@ -4,6 +4,7 @@ function containsHTMLElement(text) {
   return regex.test(text);
 }
 
+
 let index = 1;
 
 function checkClickable(element) {
@@ -43,11 +44,7 @@ elements.forEach(function (element) {
         let index = e.target.getAttribute('data-tabindex');
         let parsed = `Tab ${index} - ${parserHTML(e.target)}`;
         console.log(parsed);
-        text2speech({"inputs": parsed}).then((response) => {
-          var url = URL.createObjectURL(response);
-          var a = new Audio(url);
-          a.play();
-      });
+        callFunction(parsed);
     }
 });
 });
