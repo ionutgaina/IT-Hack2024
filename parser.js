@@ -1,6 +1,7 @@
 function containsHTMLElement(text) {
-  var htmlElement = /<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/g;
-  return htmlElement.test(text);
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(text, 'text/html');
+  return doc.body.childElementCount > 0;
 }
 
 function setTabIndexForLeafElements(element) {
@@ -39,9 +40,50 @@ function parserHTML(element) {
   if (element.tagName.toLowerCase() === 'a') {
     return parseA(element);
   }
-  
-  return 'This is not a link';
+
+  switch (element.tagName.toLowerCase()) {
+    case 'img':
+      return parseIMG(element);
+    case 'input':
+      return parseInput(element);
+    case 'button':
+      return parseButton(element);
+    case 'a':
+      return parseA(element);
+    default:
+      return parseText(element);
+  }
 }
+
+function parseIMG(element) {
+  let alt;
+
+  if (element.getAttribute('alt').trim() !== null) {
+    alt = element.getAttribute('alt');
+  }
+
+  if (alt !== undefined) {
+    return 'This is an image which is about "' + alt + '"';
+  }
+
+  return 'This image has no description'
+}
+
+
+function parseText(element) {
+  let innerHTML;
+
+  if (element.innerHTML.trim() !== null && containsHTMLElement(element.innerHTML) === false){
+    innerHTML = element.innerHTML;
+  }
+
+  if (innerHTML !== undefined) {
+    return 'This is text "' + innerHTML + '"';
+  }
+
+  return 'This is empty text'
+}
+
 function parseA(element) {
   let href, innerHTML;
 
@@ -54,11 +96,11 @@ function parseA(element) {
   }
 
   if (href === undefined && innerHTML !== undefined) {
-    return 'This is a link with no reference and text ' + innerHTML;
+    return 'This is a link with no reference and text "' + innerHTML + '"';
   } else if (href !== undefined && innerHTML === undefined) {
-    return 'This is a link to ' + href;
+    return 'This is a link to "' + href + '"';
   } else if (href !== undefined && innerHTML !== undefined) {
-    return 'This is a link to ' + href + ' with text ' + innerHTML;
+    return 'This is a link to "' + href + '" with text "' + innerHTML + '"';
   }
 
   return 'This is empty link'
