@@ -1,5 +1,5 @@
 <script>
-window.addEventListener('focus', function() {
+window.addEventListener('blur', function() {
     var focusedElement = document.activeElement;
 
     parseHTML(focusedElement);
