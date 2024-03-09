@@ -23,13 +23,13 @@ setTabIndexForLeafElements(document.body);
 var elements = document.querySelectorAll('body');
 
 elements.forEach(function (element) {
-  element.addEventListener('keyup', function (e) {
+  element.addEventListener('keyup', function(e) {
     var code = e.code;
     if (code === 'Tab') {
-      console.log(e.target);
-      parserHTML(e.target);
+        // console.log(e.target);
+        console.log(parserHTML(e.target));
     }
-  });
+});
 });
 
 function parserHTML(element) {
