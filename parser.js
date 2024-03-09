@@ -1,15 +1,19 @@
 
-// Set tabindex to 0 for all elements
-function setTabIndex(element) {
-  element.setAttribute('tabindex', '0');
-  
-  var children = element.children;
-  for (var i = 0; i < children.length; i++) {
-    setTabIndex(children[i]);
+function setTabIndexForLeafElements(element) {
+  // Check if the element has any child elements
+  if (element.children.length === 0) {
+      // Set tabindex to 0 for leaf elements
+      element.setAttribute('tabindex', '0');
+  } else {
+      // Recursively set tabindex for child elements
+      var children = element.children;
+      for (var i = 0; i < children.length; i++) {
+          setTabIndexForLeafElements(children[i]);
+      }
   }
 }
 
-setTabIndex(document.body);
+setTabIndexForLeafElements(document.body);
 
 var elements = document.querySelectorAll('body');
 
