@@ -1,0 +1,41 @@
+{
+    "background": {
+        "service_worker": "background.js",
+        "scripts": []
+    },
+    "browser_action": {
+        "default_title": "Blindful Extension",
+        "default_popup": "popup/index.html"
+    },
+    "commands": {
+        "textToSpeech": {
+            "suggested_key": {
+                "windows": "Ctrl+Shift+P",
+                "mac": "Ctrl+Shift+P",
+                "chromeos": "Ctrl+Shift+P",
+                "linux": "Ctrl+Shift+P"
+            },
+            "description": "Text to Speech",
+            "global": true
+        },
+        "speechToText": {
+            "suggested_key": {
+                "windows": "Ctrl+Shift+Y",
+                "mac": "Ctrl+Shift+Y",
+                "chromeos": "Ctrl+Shift+Y",
+                "linux": "Ctrl+Shift+Y"
+            },
+            "global": true,
+            "description": "Speech to Text"
+        }
+    },
+    "description": "Extension from IT intern Hackathon 2024",
+    "manifest_version": 3,
+    "name": "Blindful Extension",
+    "permissions": [
+        "webNavigation",
+        "tabs",
+        "activeTab"
+    ],
+    "version": "0.1"
+}
