@@ -41,7 +41,7 @@ elements.forEach(function (element) {
     if (code === 'Tab') {
         // console.log(e.target);
         let index = e.target.getAttribute('data-tabindex');
-        let parsed = index + ": " +parserHTML(e.target);
+        let parsed = `Tab ${index} - ${parserHTML(e.target)}`;
         console.log(parsed);
         text2speech({"inputs": parsed}).then((response) => {
           var url = URL.createObjectURL(response);
