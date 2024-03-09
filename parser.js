@@ -10,21 +10,14 @@ function setTabIndex(element) {
 }
 
 setTabIndex(document.body);
-// end
 
-
-var elements = document.querySelectorAll('body *');
-
-var elements = document.querySelectorAll('body *');
+var elements = document.querySelectorAll('body');
 
 elements.forEach(function(element) {
-    element.addEventListener('keydown', function(e) {
-      e.tabIndex = 0;
+    element.addEventListener('keyup', function(e) {
         var code = e.code;
         if (code === 'Tab') {
-            e.preventDefault();
-            var elem = element.activeElement;
-            console.log(elem);
+            console.log(e.target);
         }
     });
 });
